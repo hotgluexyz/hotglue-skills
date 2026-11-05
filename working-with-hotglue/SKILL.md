@@ -24,7 +24,7 @@ hotglue --help
 
 For an unfamiliar API object or endpoint, use `hotglue <area> --help` and the Hotglue Docs MCP before creating or mutating it. Inspect the relevant existing entity and a real job artifact rather than inferring its contract from a similar connector.
 
-Authenticate only when a task requires it. Do not put API keys, tenant IDs, tokens, or customer data in repository files, prompts, logs, or commits.
+Authenticate only when a task requires it. Prefer environment variables or local secret files for API keys — never put keys, tokens, or customer data in repository files, prompts, logs, or commits.
 
 ## Connector and ETL work
 
@@ -33,7 +33,7 @@ Authenticate only when a task requires it. Do not put API keys, tenant IDs, toke
 - Use `managing-available-connectors` for environment definitions, linked entities, discovery, and field maps.
 - Use `understanding-hotglue-jobs` for incremental sync, job settings, and snapshot traps.
 - Use `running-hotglue-remote-jobs` to create and poll remote jobs over the client API.
-- Treat `.secrets/` as the local location for config, catalogs, Singer streams, and job artifacts. It is ignored by this repository.
+- Treat `.secrets/` as the local location for config, catalogs, Singer streams, and job artifacts. This repository’s `.gitignore` must include `.secrets/`.
 - Verify outputs semantically: inspect catalogs, Singer JSONL, and target state, rather than only checking process exit codes.
 
 ## v2 guardrails

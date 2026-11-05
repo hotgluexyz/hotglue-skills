@@ -46,7 +46,7 @@ Do not use `tap-crm` for the entity ID or driver name and do not add a duplicate
 2. Inspect `availableConnectors.json` and list the existing source, connector, and target entries to the user before adding or deleting definitions.
 3. For an available entity, preserve the original auth UI fields and include only the requested role flags, connection fields, install URI, and icon. Mark a fork with `isForked: true` only when it is actually a fork.
 4. Deploy the environment configuration with `hotglue env deploy`.
-5. Create the v2 flow, add supported entities, and link the tenant entities.
+5. Reuse an existing v2 flow or create one when needed; add supported entities, and link the tenant entities.
 6. Run discover once for the entity being read. Confirm the expected catalog before setting a field map.
 7. Set the field map on the linked entity that is read in that direction:
    - linked **source** for a write job;
@@ -62,7 +62,8 @@ To point an entity at a custom git URI or branch, set `install_uri` on
 [connector settings](https://docs.hotglue.com/key-concepts/connectors/v2-connectors/settings).
 
 - The change is **env-wide** until reverted.
-- `connector_tag` is for version zips; use `install_uri` for a branch.
+- `connector_tag` works only with Hotglue-maintained repositories (version
+  zips). For arbitrary git repos, put the tag or commit in `install_uri`.
 - Do not change the linked `config.json` or `supportedConnectors` to change
   what code runs — those hold credentials/labels, not the install.
 
