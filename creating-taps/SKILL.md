@@ -1,5 +1,5 @@
 ---
-name: creating-singer-taps
+name: creating-taps
 description: Creates, runs, and validates Hotglue Singer taps. Use when scaffolding a tap, implementing connector extraction, or debugging tap discovery and sync output.
 ---
 
