@@ -1,5 +1,5 @@
 ---
-name: creating-hotglue-etl
+name: creating-hotglue-etl-scripts
 description: Creates and tests Hotglue gluestick and pandas ETL transformation scripts. Use when scaffolding an ETL transformation or modifying a Hotglue pipeline's transformation logic.
 ---
 
