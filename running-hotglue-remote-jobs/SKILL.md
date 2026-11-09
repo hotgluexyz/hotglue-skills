@@ -15,7 +15,7 @@ until it finishes.
 ## Setup and auth
 
 - **Defaults** (ask the user when unknown):
-  - UI: `https://hotglue.xyz/env/{env_id}/content/flows/v2/{flow_id}/connectors`
+  - UI: `https://hotglue.com/env/{env_id}/content/flows/v2/{flow_id}/connectors`
   - `env_id`: `{env_id}`
   - `flow_id`: `{flow_id}`
   - `tenant`: `default`
