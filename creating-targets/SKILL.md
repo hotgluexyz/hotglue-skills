@@ -1,5 +1,5 @@
 ---
-name: create-targets
+name: creating-targets
 description: Creates, runs, validates, and debugs Hotglue Singer targets. Use when scaffolding a target, reproducing a target job, or checking Singer input and target state output.
 ---
 
