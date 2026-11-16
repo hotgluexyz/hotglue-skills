@@ -1,5 +1,5 @@
 ---
-title: Hotglue Agent Onboarding
+title: hotglue-introduction
 description: "Hotglue crash-course for agents"
 ---
 
