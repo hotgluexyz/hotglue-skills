@@ -40,7 +40,7 @@ A **linked connector** is a connector a tenant has authenticated and connected o
 
 ### 1) Tenants link their credentials
 
-This can be done via the hotglue widget or a magic link. The magic link is a short-lived authenticated url that can be sent to tenants so they can pick their connector and enter their credentials.
+This can be done via the hotglue widget or a magic link. The magic link is a short-lived authenticated url that can be sent to tenants so they can pick their connector and enter their credentials. For agent-driven OAuth linking, use `authenticating-oauth`.
 
 ### 2) Run a discover
 

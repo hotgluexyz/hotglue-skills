@@ -30,6 +30,7 @@ Authenticate only when a task requires it. Prefer environment variables or local
 
 - Before a new connector, search `hotgluexyz` for `tap-<service>` or `target-<service>` and extend an existing connector when it matches the requested integration.
 - Use `creating-taps`, `creating-targets` or `creating-hotglue-etl-scripts` for the relevant workflow.
+- Use `authenticating-oauth` when a tap, target, or connector requires OAuth or magic-link tenant linking; resume the parent task after verification.
 - Use `managing-available-connectors` for environment definitions, linked entities, discovery, and field maps.
 - Use `understanding-hotglue-jobs` for incremental sync, job settings, and snapshot traps.
 - Use `running-hotglue-remote-jobs` to create and poll remote jobs over the client API.
