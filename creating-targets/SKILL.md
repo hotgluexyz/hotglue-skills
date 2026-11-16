@@ -68,8 +68,9 @@ If instructed:
 
 1. Ensure the entity is supported on the v2 flow.
 2. Link the tenant (OAuth via `authenticating-oauth`, or API-key link with secrets kept out of chat).
-3. For write jobs, set the field map on the linked **source** (the read side), not on the primary connector unless the connector itself is the read side — see `managing-available-connectors`.
-4. Run discover when catalogs are needed; verify catalog and field map independently.
+3. Run discover once for the entity being read; confirm the catalog before setting a field map — see `managing-available-connectors`.
+4. For write jobs, set the field map on the linked **source** (the read side), not on the primary connector unless the connector itself is the read side.
+5. Re-fetch the linked entity and verify the persisted field map and selected streams independently of the catalog.
 
 ## 8. Remote jobs and debug (prompt-gated)
 

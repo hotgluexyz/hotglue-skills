@@ -22,7 +22,7 @@ Docs: [Magic Links](https://docs.hotglue.com/connection-methods/magic-links), [T
 
 ## 1. Tenant naming
 
-Prefer a stable test tenant such as `agent-<entity>-<yyyyMMdd>`, or reuse an existing tenant. Tenants are created on first successful link.
+Always use a new test tenant such as `agent-<entity>-<yyyyMMdd>` (add a short suffix if that id already exists). Never reuse an existing production or shared tenant. Tenants are created on first successful link.
 
 ## 2. Check existing tokens first
 
@@ -34,18 +34,33 @@ Before generating a magic link or opening a browser, inspect the tenant's linked
 | Source (tap) | `/v2/${ENV_ID}/${FLOW_ID}/${TENANT}/linkedSources` |
 | Target | `/v2/${ENV_ID}/${FLOW_ID}/${TENANT}/linkedTargets` |
 
+Do **not** print the raw response. Capture it, then emit only the safe-field allowlist below.
+
 ```bash
-curl --silent --request GET \
+mkdir -p .secrets
+curl --silent --show-error --fail \
+  --request GET \
   --url "https://api.hotglue.com/v2/${ENV_ID}/${FLOW_ID}/${TENANT}/${LINKED_PATH}" \
-  --header "x-api-key: ${HOTGLUE_SECRET_API_KEY}"
+  --header "x-api-key: ${HOTGLUE_SECRET_API_KEY}" \
+  --output ".secrets/linked-entities.json"
+
+# Linked-entity items (omit ?config): common fields include id, label, type, domain,
+# icon, disconnected, isReconnecting, tenant_id, fieldMap, auth_url/tap_url, client_id.
+# Secrets live under config when ?config is requested (access_token, refresh_token, etc.).
+SAFE_FIELDS='["id","label","type","domain","disconnected","isReconnecting","tenant_id"]'
+jq --arg id "$ENTITY_ID" --argjson keys "$SAFE_FIELDS" '
+  map(select(.id == $id or .tap == $id))
+  | map(with_entries(select(.key as $k | $keys | index($k))))
+' .secrets/linked-entities.json
 ```
 
-Use `LINKED_PATH` = `linkedConnectors`, `linkedSources`, or `linkedTargets` per the table.
+Use `LINKED_PATH` = `linkedConnectors`, `linkedSources`, or `linkedTargets` per the table. Keep `.secrets/linked-entities.json` git-ignored; delete it when finished if it is not needed.
 
-- If the entity is already linked with tokens/config present, skip OAuth. Read credentials into `.secrets/` if needed (section 6) and resume the original task.
-- Project output to non-secret fields only — never echo full linked configuration.
-- The Connect UI may still show **Connect** after tokens exist; trust the API/config, not the button label.
-- Re-run OAuth only when the user requests a re-link, tokens are missing/expired/invalid, or a minimal authenticated check fails (e.g. tap discover/sync or target write).
+- Treat only `$SAFE_FIELDS` as printable. Never echo `config`, `client_id`, `client_secret`, `auth_url`, `tap_url`, catalogs, or any other field unless you have verified it is non-secret for that payload.
+- Usable linked OAuth: the entity appears in the filtered list and `disconnected` is not `true`. If so, skip OAuth; read credentials into `.secrets/` if needed (section 6) and resume.
+- Omit `?config` on this status check. Fetch config only in section 6, into a file — never to stdout.
+- The Connect UI may still show **Connect** after tokens exist; trust this API projection, not the button label.
+- Re-run OAuth only when the user requests a re-link, the entity is missing / `disconnected` is true, or a minimal authenticated check fails (e.g. tap discover/sync or target write).
 
 ## 3. Generate a magic link
 
@@ -74,17 +89,31 @@ Never extract browser cookies, passwords, or unrelated session tokens.
 
 ## 5. Verify link success
 
-After the user confirms auth (or after a short poll window), re-check the same linked-entity GET as section 2 for this role.
+After the user confirms auth (or after a short poll window), repeat the section 2 capture + `$SAFE_FIELDS` projection for this role.
 
-Confirm the entity appears with tokens/config present. Project output to non-secret fields (`id`, connection status) — never echo full linked configuration.
+Confirm the entity appears and `disconnected` is not `true`. Do not print the raw linked JSON.
 
-The Connect UI may still show **Connect** after tokens are written. Trust the API/config, not the button label.
+The Connect UI may still show **Connect** after tokens are written. Trust the API projection, not the button label.
 
 ## 6. Read credentials safely
 
-When local tap or target testing needs config, fetch linked config into `.secrets/` and keep it git-ignored. Never log access tokens, refresh tokens, client secrets, authorization codes, or full linked JSON.
+When local tap or target testing needs config, request it into a file — not stdout:
 
-Delete temporary URL files (e.g. `oauth-url.txt`) after authentication succeeds.
+```bash
+curl --silent --show-error --fail \
+  --request GET \
+  --url "https://api.hotglue.com/v2/${ENV_ID}/${FLOW_ID}/${TENANT}/${LINKED_PATH}?config=true" \
+  --header "x-api-key: ${HOTGLUE_SECRET_API_KEY}" \
+  --output ".secrets/linked-entities-config.json"
+# Extract the matching entity config into .secrets/config.json without printing it.
+jq --arg id "$ENTITY_ID" '
+  map(select(.id == $id or .tap == $id)) | .[0].config // empty
+' .secrets/linked-entities-config.json > .secrets/config.json
+```
+
+Keep `.secrets/` git-ignored. Never log access tokens, refresh tokens, client secrets, authorization codes, or full linked JSON. Prefer the section 2 `$SAFE_FIELDS` projection if you need to confirm which entity was linked.
+
+Delete temporary URL files (e.g. `oauth-url.txt`) and any linked-entity JSON dumps you no longer need after authentication succeeds.
 
 ## 7. Resume the original task
 
