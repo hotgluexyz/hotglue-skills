@@ -1,6 +1,6 @@
 ---
 name: creating-taps
-description: Creates, runs, and validates Hotglue Singer taps. Use when scaffolding a tap, implementing connector extraction, or debugging tap discovery and sync output.
+description: Creates, authenticates, runs, and validates Hotglue Singer taps. Use when scaffolding a tap, linking OAuth for a source, implementing connector extraction, or debugging tap discovery and sync output.
 ---
 
 # Creating Singer Taps
@@ -17,6 +17,11 @@ uv pip install --python .venv/bin/python -e .
 Read the generated `README.md` and `AGENTS.md`. If the user may already have a connector for this source, confirm with them before scaffolding a new tap.
 
 Use a dedicated tap venv (not a target or ETL venv). Match deployed Python and package pins when reproducing a job.
+
+## Auth
+
+- **OAuth:** use `authenticating-oauth` (check existing linked source tokens → magic link if needed → verify). That skill returns control after verification — continue this playbook; do not stop at auth.
+- **API key / Bearer / Basic:** write config under `.secrets/config.json` (git-ignored). Never commit credentials.
 
 ## Run locally
 
