@@ -1,5 +1,5 @@
 ---
-title: hotglue-introduction
+name: hotglue-introduction
 description: "Hotglue crash-course for agents"
 ---
 
