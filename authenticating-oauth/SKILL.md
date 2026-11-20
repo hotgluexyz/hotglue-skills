@@ -11,7 +11,7 @@ Look up magic links, tenants, linked sources/connectors/targets, and connector r
 
 ## Flow
 
-1. **Prerequisites** — Hotglue API credentials available to the agent (env, PAT, or harness-managed). Entity supported on the flow with OAuth configured. Know the entity role (source / connector / target) and id.
+1. **Prerequisites** — Follow the MCP's own authentication contract for Hotglue API calls; for CLI commands, follow the CLI's own contract. Entity supported on the flow with OAuth configured. Know the entity role (source / connector / target) and id.
 2. **Tenant** — Use a dedicated non-production test tenant unless explicitly prompted otherwise. Do not reuse shared or production tenants.
 3. **Check existing link** — Call the linked-entities API (`linkedSources`, `linkedConnectors`, or `linkedTargets`). Do not print raw responses and omit sensitive fields (`config`, tokens, secrets, auth URLs). If the entity is already linked, skip OAuth and resume.
 4. **Magic link** — Create a magic link for the tenant, flow, and entity via the Hotglue API. Treat the URL as sensitive.
