@@ -82,5 +82,5 @@ When an available entity uses a custom Singer target, set `singer_sdk: true` und
 ## Configuration and security
 
 - Read a target's config schema before linking or running. Some target branches can incorrectly require settings unrelated to the sink being used; fix the target schema rather than persisting meaningless credentials.
-- Keep API keys and tenant credentials in local secret files or environment variables. Never commit them or print full effective job configuration.
+- Follow the MCP's own contract for Hotglue API authentication and the CLI's own contract for CLI commands. Never commit API keys or tenant credentials or print full effective job configuration.
 - When a job command can echo secrets, project its output to non-sensitive job fields such as `job_id`, `status`, and `job_url`.

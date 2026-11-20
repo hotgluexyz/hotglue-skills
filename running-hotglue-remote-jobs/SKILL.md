@@ -21,10 +21,7 @@ until it finishes.
   - `tenant`: `default`
 - **API root**: the instance's client API root.
   - `https://api.hotglue.com`
-- **Auth**: read the env **Secret API Key** from `$HOTGLUE_SECRET_API_KEY`
-  (not the Public API Key or JWT private key). If unset, ask the user to export
-  it — never ask them to paste the key into prompts or chat. Send it as the
-  `x-api-key` header on every call; do not display or log the key.
+- **Auth**: follow the MCP's own authentication contract for Hotglue API calls; for CLI commands, follow the CLI's own contract. Do not prescribe credential sources, key types, headers, or fallbacks in this skill. Never display or log credentials or ask users to paste them into prompts or chat.
 - **Also need**: `connector_id`.
 - List tenants with `GET /tenants/{env_id}` when the tenant is unknown or not
   `default`. Nonexistent envs return `Environment does not exist!`; missing

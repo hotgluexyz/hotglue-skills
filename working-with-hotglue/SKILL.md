@@ -24,7 +24,7 @@ hotglue --help
 
 For an unfamiliar API object or endpoint, use `hotglue <area> --help` and the Hotglue Docs MCP before creating or mutating it. Inspect the relevant existing entity and a real job artifact rather than inferring its contract from a similar connector.
 
-Authenticate only when a task requires it. Prefer environment variables or local secret files for API keys — never put keys, tokens, or customer data in repository files, prompts, logs, or commits.
+For Hotglue API authentication, follow the MCP's own contract; for CLI commands, follow the CLI's own contract. Do not prescribe credential sources or fallbacks in this skill. Never put keys, tokens, or customer data in repository files, prompts, logs, or commits.
 
 ## Connector and ETL work
 
